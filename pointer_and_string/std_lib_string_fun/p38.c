@@ -25,6 +25,7 @@ void xstrcpy(char *target, char *source)
         target++;
         source++;
     }
+    *target = '\0';
 }
 
 int xstrlen(char *str)
