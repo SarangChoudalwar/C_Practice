@@ -67,6 +67,69 @@ void addatbeg(struct node **ptr, int val)
     *ptr = new;
 }
 
+void addafter(struct node **ptr,int findVal, int newVal)
+{
+    struct node *temp;
+    temp = *ptr;
+    int valFound=0;
+
+    while(temp!=NULL)
+    {
+       if(temp->marks == findVal)
+        {
+            valFound = 1;
+            break;
+        }
+        temp = temp->next;
+    }
+    if(valFound)
+    {
+        struct node *new;
+        struct node *temp2;
+        new = (struct node*)malloc(sizeof(struct node));
+        new->marks = newVal;
+        temp2 = temp->next;
+        new->next = temp2;
+        temp->next = new;
+    }
+    else
+    {
+        printf("Value of %d not found\n", newVal);
+    }
+}
+
+int delete(struct node **ptr, int val)
+{
+    struct node *temp, *old;
+    int valFound=0;
+    temp = *ptr;
+    while(temp !=NULL)
+    {
+        if(temp->marks == val)
+        {
+            if(temp == *ptr)
+            {
+                *ptr = temp->next;
+                free(temp);
+                return 0;
+            }
+            else
+            {
+                old->next= temp->next;
+                free(temp);
+                return 0;
+            }
+        }
+        else
+        {
+            old= temp;
+            temp=temp->next;
+        }
+    }
+
+printf("Element %d not found\n",val);
+}
+
 int main()
 {
     struct node *ptr;
@@ -84,6 +147,13 @@ int main()
     addatbeg(&ptr,888);
     addatbeg(&ptr,777);
     display(&ptr);
+    addafter(&ptr,7,1);
+    addafter(&ptr,999,99);
+    addafter(&ptr,20,121);
+    display(&ptr);
+    delete(&ptr, 999);
+    delete(&ptr, 777);
+    delete(&ptr, 1);
     printf("Number of nodes is %d\n", count(ptr));
     return 0;
 }
