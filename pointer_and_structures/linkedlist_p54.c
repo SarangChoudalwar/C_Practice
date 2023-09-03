@@ -12,6 +12,7 @@ struct node
 void add(struct node **q, int val)
 {
     struct node *temp;
+    struct node *old;
     int flag;
     temp = *q;
     if(temp == NULL)
@@ -27,6 +28,7 @@ void add(struct node **q, int val)
     {
         while(temp != NULL && (temp->val < val))
         {
+            old = temp;
             temp = temp->link;
         }
         /* linked list end or the desired location has been reached. */
@@ -36,19 +38,18 @@ void add(struct node **q, int val)
             struct node *new;
             new = (struct node *)malloc(sizeof(struct node));
             new->val = val;
-            new->link = temp->link;
+            new->link = temp;
             *q = new; 
         }
         else
         {
-            /* no other than first node needs to be inserted */
+            /* other than first node needs to be inserted */
             struct node *new;
             new = (struct node *)malloc(sizeof(struct node));
             new->val = val;
-            new->link = temp->link;
-            temp->link = new;
+            new->link = temp;
+            old->link = new;
         }
-        
     }
 }
 
@@ -113,18 +114,27 @@ int main()
     p = NULL;
 
     add(&p,5);
+    display(&p);
+    printf("\n");
     add(&p,1);    
+    display(&p);
+    printf("\n");
     add(&p,6);    
+    display(&p);
+    printf("\n");
     add(&p,4);    
+    display(&p);
+    printf("\n");
     add(&p,7);
     display(&p);
-    printf("count of node is %d\n",count(&p));
+    printf("\n");
+ 
     delete(&p, 7);    
     delete(&p, 4);    
     delete(&p, 5);    
     delete(&p, 9);    
     display(&p);
-    printf("count of node is %d\n",count(&p));
+
 
     return 0;
 }
