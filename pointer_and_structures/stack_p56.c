@@ -1,4 +1,5 @@
 /* Demonstration of stack push and pop operation using linked-list */
+/* Same as adding the node at the begining and removing it from the begining */
 #include<stdio.h>
 #include<stdlib.h>
 
