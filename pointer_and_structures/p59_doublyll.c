@@ -17,9 +17,9 @@ void addatbeg(struct node **q, int val)
         temp = *q;
         struct node *new;
         new = (struct node *) malloc (sizeof(struct node));
-        new->val = val;
         new->prev = NULL;
-        new->next = temp;
+        new->val = val;
+        new->next = NULL;
         *q = new;
     }
     else{
@@ -46,7 +46,7 @@ void append(struct node **q, int val)
         {
             temp = temp->next;
         }
-
+        /* temp is pointing to the last node */
         struct node *new;
         new = (struct node *) malloc (sizeof(struct node));
         new->prev = temp;
@@ -58,8 +58,9 @@ void append(struct node **q, int val)
     {
         /*Its a first node that should be created */
         struct node *new;
-        new->val = val;
+        new = (struct node *) malloc (sizeof(struct node));
         new->prev = NULL;
+        new->val = val;
         new->next = NULL;
         *q = new;
     }
@@ -83,7 +84,7 @@ void display(struct node **q)
     {
         temp = temp->next;
     }
-     
+    /* Here the temp is pointing to the last node */ 
     while(temp != NULL)
     {   
         printf("%d\n",temp->val);
@@ -119,22 +120,61 @@ void count(struct node **q)
 
 void addafter(struct node **q, int addAfter, int val)
 {
-    struct node *temp;
+    struct node *temp=NULL;
+    struct node *old=NULL;
     temp = *q;
+    old = temp;
+    int nodeFound =0;
     while(temp != NULL)
     {
         if(temp->val == addAfter)
         {
-            struct node *new;
-            new = (struct node *) malloc (sizeof(struct node));
-            new->prev = temp->next;
-            new->val = val;
-            new->next = temp->next->next;
-            temp->next = new;
-            temp->next->next = new->next;
+            nodeFound =1;
             break;
         }
+        old = temp;
         temp = temp->next;
+    }
+
+    if(nodeFound)
+    {
+        /* Situation where old is pointing to last node and temp is pointing to NULL */
+        if(temp == NULL)
+        {
+            /* Node to be added at the last */
+            struct node *new;
+            new = (struct node *) malloc (sizeof(struct node));
+            new->prev = old;
+            new->val = val;
+            new->next = NULL;
+            old->next = new;
+        }
+        else if(old == temp)
+        {
+            /* Where the node to be inserted is after first node */
+            struct node *new;
+            new = (struct node *) malloc (sizeof(struct node));
+            new->prev = NULL;
+            new->val = val;
+            new->next = temp;
+            temp->prev = new;
+            *q = new;
+        }
+        else 
+        {
+            /* else the node to be added is the inbetween node */ 
+            struct node *new;
+            new = (struct node *) malloc (sizeof(struct node));
+            new->prev = old;
+            new->val = val;
+            new->next = temp;
+            old->next = new;
+            temp->prev = new; 
+        }
+    }
+    else
+    {
+        printf("desired value not found \n");
     }
 }
 
@@ -146,6 +186,7 @@ int main()
     addatbeg(&q,11);    
     addatbeg(&q,12);    
     display(&q);
+
     append(&q,13);
     append(&q,14);
     append(&q,15);
@@ -155,6 +196,9 @@ int main()
     addafter(&q,11,111);
     addafter(&q,111,1111);
     addafter(&q,99,10);
+    addafter(&q,12,12);
+    addafter(&q,15,15);
     display(&q);
-    return 0;
+
+   return 0;
 }
