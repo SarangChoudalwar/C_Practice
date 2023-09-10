@@ -178,6 +178,47 @@ void addafter(struct node **q, int addAfter, int val)
     }
 }
 
+void delete(struct node **q, int num)
+{
+    struct node *temp;
+    struct node *old;
+    temp = *q;
+    
+    while(temp != NULL)
+    {
+        if(temp->val == num)
+        {
+            if(temp->prev == NULL)
+            {
+                /* it's a first node which needs to be deleted */
+                struct node *temp2;
+                *q = temp->next;    
+                temp2 = *q;
+                temp2->prev = NULL;
+                free(temp);
+                break; 
+            }
+            else if(temp->next == NULL)
+            {
+                /*it's the last node which needs to be deleted */
+                old->next = NULL;
+                free(temp);
+                break; 
+            }
+            else
+            {
+                /*it's the inbeteen node which needs to be deleted */
+                old->next = temp->next;
+                temp->next->prev = old;
+                free(temp);
+                break; 
+            }
+        }
+        old = temp;
+        temp = temp->next;
+    }
+}
+
 int main()
 {
     struct node *q;
@@ -198,7 +239,13 @@ int main()
     addafter(&q,99,10);
     addafter(&q,12,12);
     addafter(&q,15,15);
+    addatbeg(&q,30);
+    append(&q,40);
     display(&q);
-
+    
+    delete(&q,1111);
+    delete(&q,30);
+    delete(&q,40);
+    display(&q);
    return 0;
 }
